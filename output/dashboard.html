@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentPilot — Candidate Evaluation Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card-bg: rgba(22, 27, 34, 0.75);
+            --border: rgba(255, 255, 255, 0.1);
+            --teal: #2dd4bf;
+            --purple: #a855f7;
+            --amber: #f59e0b;
+            --green: #34d399;
+            --red: #f87171;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            padding: 2rem;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(45, 212, 191, 0.1) 0%, transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 45%);
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; color: #fff; }
+        .timestamp { color: var(--text-muted); font-size: 0.85rem; }
+
+        .profile-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .match-score-badge {
+            text-align: center;
+            background: rgba(45, 212, 191, 0.12);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 14px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .score-num { font-family: 'Outfit', sans-serif; font-size: 3rem; font-weight: 700; color: var(--teal); }
+        .verdict-tag { font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; color: var(--green); }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .q-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--teal);
+            border-radius: 12px;
+            padding: 1.4rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .q-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--purple);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .rubric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .rubric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.4rem;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .matrix-table th, .matrix-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .badge-matched { color: var(--green); font-weight: 600; }
+        .badge-gap { color: var(--amber); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>🎯 TalentPilot Candidate Evaluation</h1>
+                <div class="timestamp">Multi-Agent AI Pipeline • 2026-08-15 20:43:02</div>
+            </div>
+        </header>
+
+        <!-- Candidate Profile & Score -->
+        <div class="profile-card">
+            <div>
+                <h2 style="font-family: 'Outfit'; font-size: 1.6rem; margin-bottom: 0.4rem;">Alex Morgan</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;"><strong>Target Role:</strong> Senior AI Software Engineer | <strong>Email:</strong> alex.morgan@example.com</p>
+                <div>
+                    <strong>Key Strengths:</strong>
+                    <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+                        
+                        <li>4 years Python & FastAPI microservices experience</li>
+                        
+                        <li>Enforces strict Pydantic JSON schemas across endpoints</li>
+                        
+                        <li>Built RESTful API integrations connecting LLMs and databases</li>
+                        
+                        <li>Deployed async doc intelligence pipelines processing 5,000+ pages/week</li>
+                        
+                        <li>Hands-on GCP Cloud Run & Docker experience</li>
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="match-score-badge">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Match Score</div>
+                <div class="score-num">83</div>
+                <div class="verdict-tag">Strong Match</div>
+            </div>
+        </div>
+
+        <!-- Skill Matrix -->
+        <div class="section-title">📊 Requirements vs Resume Alignment Matrix</div>
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>Requirement / Competency</th>
+                    <th>Alignment Status</th>
+                    <th>Evidence / Analysis</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td><strong>Python & FastAPI</strong></td>
+                    <td class="badge-matched">MATCHED</td>
+                    <td>4 years Python & FastAPI microservices experience</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>Pydantic & JSON Schemas</strong></td>
+                    <td class="badge-matched">MATCHED</td>
+                    <td>Enforces strict Pydantic JSON schemas across endpoints</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>REST APIs & Webhooks</strong></td>
+                    <td class="badge-matched">MATCHED</td>
+                    <td>Built RESTful API integrations connecting LLMs and databases</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>RAG & Document Intelligence</strong></td>
+                    <td class="badge-matched">MATCHED</td>
+                    <td>Deployed async doc intelligence pipelines processing 5,000+ pages/week</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>GCP Cloud Run & Docker</strong></td>
+                    <td class="badge-matched">MATCHED</td>
+                    <td>Hands-on GCP Cloud Run & Docker experience</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>Healthcare EHR / Clinical Workflows</strong></td>
+                    <td class="badge-gap">GAP</td>
+                    <td>Missing explicit experience in Healthcare EHR / Clinical Workflows</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <!-- Tailored Questions -->
+        <div class="section-title">❓ Tailored Recruiter Interview Guide (Agent 2 Output)</div>
+        
+        <div class="q-card">
+            <span class="q-tag">Q1 • Gap Probe — Clinical & Healthcare Data</span>
+            <div style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff;">"Our role involves integrating with clinical healthcare data (EHR/FHIR). Since your background is heavy in general enterprise automation, how would you approach learning healthcare data security (HIPAA) and API standards?"</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;"><strong>Targeted Signal:</strong> Healthcare EHR / Clinical Workflows</p>
+            <p style="font-size: 0.9rem; color: var(--teal);"><strong>Expected Strong Answer:</strong> Candidate explains how they rapidly ramp up on new domain standards, citing past experience handling enterprise OAuth/Secret Manager security.</p>
+        </div>
+        
+        <div class="q-card">
+            <span class="q-tag">Q2 • Technical Deep-Dive — Pydantic & LLM Guardrails</span>
+            <div style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff;">"You mentioned enforcing Pydantic schemas across all LLM endpoints. Can you walk through a time an LLM returned malformed JSON or hallucinated a field, and how your Pydantic validation handled it?"</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;"><strong>Targeted Signal:</strong> Pydantic & JSON Schemas</p>
+            <p style="font-size: 0.9rem; color: var(--teal);"><strong>Expected Strong Answer:</strong> Describes fallback retry logic, schema validation error catches, and strict output constraint prompts.</p>
+        </div>
+        
+        <div class="q-card">
+            <span class="q-tag">Q3 • Architecture — Async Document Intelligence</span>
+            <div style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff;">"In your previous role, you built an async pipeline processing 5,000+ pages/week. How did you handle rate limits, concurrency, and P99 latency when calling Anthropic/OpenAI APIs?"</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;"><strong>Targeted Signal:</strong> RAG & Document Intelligence</p>
+            <p style="font-size: 0.9rem; color: var(--teal);"><strong>Expected Strong Answer:</strong> Mentions async worker pools (asyncio/Celery), exponential backoff retry algorithms, and token context chunking.</p>
+        </div>
+        
+        <div class="q-card">
+            <span class="q-tag">Q4 • Stakeholder Operations</span>
+            <div style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff;">"How do you work directly with non-technical operations teams to translate fuzzy business requests into technical API specifications?"</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;"><strong>Targeted Signal:</strong> Non-Technical Stakeholder Collaboration</p>
+            <p style="font-size: 0.9rem; color: var(--teal);"><strong>Expected Strong Answer:</strong> Describes spending time observing manual workflows first, mapping step-by-step logic, and building functional prototypes.</p>
+        </div>
+        
+        <div class="q-card">
+            <span class="q-tag">Q5 • Cloud & Deployment</span>
+            <div style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff;">"Tell us about your experience deploying serverless Python containers on GCP Cloud Run or Docker. How do you handle container scaling and secret management?"</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;"><strong>Targeted Signal:</strong> GCP Cloud Run & Docker</p>
+            <p style="font-size: 0.9rem; color: var(--teal);"><strong>Expected Strong Answer:</strong> Mentions stateless container design, GCP Secret Manager integration, and zero-idle cost scaling.</p>
+        </div>
+        
+
+        <!-- Evaluation Rubric -->
+        <div class="section-title">📋 Standardized Candidate Evaluation Rubric (1-5 Scale)</div>
+        <div class="rubric-grid">
+            
+            <div class="rubric-card">
+                <h3 style="font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--purple);">Python & Microservices Architecture</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;">Category: Core Engineering | Weight: High</p>
+                <div style="font-size: 0.85rem;">
+                    <p style="margin-bottom: 0.4rem;"><strong style="color: var(--red);">1/5 (Needs Improvement):</strong> Basic script writing only; struggles with async Python, FastAPI routes, or Pydantic schemas.</p>
+                    <p style="margin-bottom: 0.4rem;"><strong style="color: var(--amber);">3/5 (Proficient):</strong> Competent in building FastAPI endpoints, Pydantic validation models, and RESTful API integrations.</p>
+                    <p><strong style="color: var(--green);">5/5 (Expert):</strong> Mastery of async microservices, schema enforcement, rate-limit retries, and high-concurrency pipelines.</p>
+                </div>
+            </div>
+            
+            <div class="rubric-card">
+                <h3 style="font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--purple);">LLM Guardrails & Schema Enforcement</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;">Category: AI Systems | Weight: High</p>
+                <div style="font-size: 0.85rem;">
+                    <p style="margin-bottom: 0.4rem;"><strong style="color: var(--red);">1/5 (Needs Improvement):</strong> Relies solely on prompt wording without code-level schema validation or fallback error handling.</p>
+                    <p style="margin-bottom: 0.4rem;"><strong style="color: var(--amber);">3/5 (Proficient):</strong> Enforces Pydantic schemas and structured JSON outputs to prevent hallucination.</p>
+                    <p><strong style="color: var(--green);">5/5 (Expert):</strong> Implements robust multi-agent state passing, deterministic rules layers, and automated evaluation harnesses.</p>
+                </div>
+            </div>
+            
+            <div class="rubric-card">
+                <h3 style="font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--purple);">Domain Adaptability & Compliance</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;">Category: Operational Fit | Weight: Medium</p>
+                <div style="font-size: 0.85rem;">
+                    <p style="margin-bottom: 0.4rem;"><strong style="color: var(--red);">1/5 (Needs Improvement):</strong> Unfamiliar with enterprise security, OAuth, key vault management, or HIPAA privacy requirements.</p>
+                    <p style="margin-bottom: 0.4rem;"><strong style="color: var(--amber);">3/5 (Proficient):</strong> Understands OAuth 2.0, secret managers, and secure handling of sensitive enterprise data.</p>
+                    <p><strong style="color: var(--green);">5/5 (Expert):</strong> Proactive focus on compliance, role-based access control (RBAC), and audit-ready data pipelines.</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>

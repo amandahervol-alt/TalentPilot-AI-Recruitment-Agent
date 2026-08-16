@@ -1,0 +1,24 @@
+ALEX MORGAN
+Email: alex.morgan@example.com | Phone: 555-019-2831 | GitHub: github.com/alexmorgan-ai
+
+AI SOFTWARE ENGINEER
+AI Software Engineer with 4 years of experience designing and deploying agentic workflows, LLM applications, and REST API microservices. Specialized in Python, FastAPI, Pydantic, and multi-agent orchestration. Proven track record of reducing manual analysis time by 70% and automating complex document processing pipelines.
+
+TECHNICAL SKILLS:
+- Languages & Frameworks: Python (Advanced), FastAPI, Pydantic, RESTful APIs, Webhooks, SQL
+- AI & LLM Systems: Claude (Anthropic), OpenAI API, LangChain, RAG Pipelines, Structured JSON Schemas, Multi-Agent Workflows
+- Cloud & Infrastructure: GCP Cloud Run, Docker, Git, OAuth 2.0, Secret Manager
+- Business & Process: Requirements Gathering, Process Mapping, Non-Technical Stakeholder Collaboration
+
+EXPERIENCE:
+AI Engineer | Enterprise Automation Inc. | 2023 - Present
+- Architected and deployed asynchronous document intelligence pipelines processing 5,000+ pages of unstructured data per week, reducing analysis cycle time by 70%.
+- Built RESTful API integrations connecting Anthropic Claude tool-calling with internal Postgres and Google Sheets databases.
+- Enforced strict Pydantic JSON schemas across all LLM endpoints to eliminate output hallucination in financial and compliance reports.
+
+Automation Developer | TechSolutions Group | 2021 - 2023
+- Developed Python automation scripts and webhook integrations for internal operations teams.
+- Collaborated directly with non-technical business managers to translate manual operational workflows into automated API pipelines.
+
+EDUCATION:
+BS in Computer Science — State University (2021)

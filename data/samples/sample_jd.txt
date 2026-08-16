@@ -1,0 +1,18 @@
+JOB TITLE: Senior AI Software Engineer
+COMPANY: Apex HealthTech Solutions
+LOCATION: Remote
+
+ROLE OVERVIEW:
+We are seeking a Senior AI Software Engineer to design, build, and deploy production AI agents and workflow automation systems. You will work closely with clinical and operational teams to transform unstructured medical data into structured insights.
+
+REQUIRED QUALIFICATIONS:
+- 3+ years of experience building production Python web applications and API integrations (FastAPI, REST APIs, Webhooks)
+- Hands-on experience with LLM orchestration (Claude, OpenAI, LangChain/LangGraph, or Pydantic schemas)
+- Experience building RAG pipelines, document intelligence systems, or multi-agent architectures
+- Demonstrated ability to translate fuzzy operational requirements from non-technical stakeholders into functional specs
+- Familiarity with enterprise security, OAuth, key vault management, and HIPAA compliance considerations
+
+NICE TO HAVE:
+- Experience with React UI integrations or frontend chat widgets
+- Background in healthcare IT or clinical data workflows (EHRs, FHIR)
+- Experience with Docker and cloud serverless deployments (GCP Cloud Run or Azure)
