@@ -1,0 +1,17 @@
+JOB TITLE: Senior Healthcare Data Analyst
+COMPANY: CareStream Health Partners
+LOCATION: Dallas, TX (Hybrid)
+
+ROLE OVERVIEW:
+We are seeking an experienced Healthcare Data Analyst to analyze clinical outcomes, patient encounter data, and operational healthcare metrics across our regional hospital network.
+
+REQUIRED QUALIFICATIONS:
+- 3+ years of experience analyzing large clinical or operational datasets
+- Advanced SQL proficiency (window functions, query optimization, complex joins)
+- Strong Python data analysis skills (Pandas, NumPy, Matplotlib/Seaborn)
+- Proven experience building executive dashboards in Tableau or PowerBI
+- Strong understanding of statistical modeling and hypothesis testing
+
+NICE TO HAVE:
+- Experience with healthcare clinical claims, EHR systems (Epic/Cerner), and FHIR/HL7 standards
+- Familiarity with HIPAA compliance and clinical data governance

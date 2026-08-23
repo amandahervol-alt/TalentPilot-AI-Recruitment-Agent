@@ -1,0 +1,17 @@
+JOB TITLE: Senior AI Product Manager
+COMPANY: Horizon Enterprise AI
+LOCATION: Hybrid / Remote
+
+ROLE OVERVIEW:
+We are looking for a Senior AI Product Manager to lead our Generative AI and intelligent workflow automation platform. You will bridge customer discovery, technical engineering, and business strategy to launch high-impact LLM products.
+
+REQUIRED QUALIFICATIONS:
+- 4+ years of Product Management experience in SaaS, enterprise software, or AI products
+- Proven track record of defining product roadmaps, writing technical PRDs, and collaborating with ML engineers
+- Experience tracking adoption KPIs, user retention, and customer feedback loops
+- Strong executive communication skills and ability to manage cross-functional stakeholders
+
+NICE TO HAVE:
+- Hands-on experience with LLM prompt engineering, few-shot prompting, and model benchmarking
+- Familiarity with MCP (Model Context Protocol) and API integrations
+- Experience with B2B SaaS pricing and token cost governance

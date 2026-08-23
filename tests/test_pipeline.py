@@ -4,44 +4,39 @@ from src.pipeline import TalentPilotPipeline
 from src.report_generator import ReportGenerator
 
 
-@pytest.fixture
-def sample_inputs():
-    jd_path = Path("data/samples/sample_jd.txt")
-    resume_path = Path("data/samples/sample_resume.txt")
+@pytest.mark.parametrize("jd_path,resume_path,expected_candidate", [
+    ("data/samples/sample_jd.txt", "data/samples/sample_resume.txt", "Alex Morgan"),
+    ("data/samples/sample_jd_pm.txt", "data/samples/sample_resume_pm.txt", "Jordan Taylor"),
+    ("data/samples/sample_jd_analyst.txt", "data/samples/sample_resume_analyst.txt", "Samantha Chen")
+])
+def test_talentpilot_multi_role_pipeline(jd_path, resume_path, expected_candidate):
+    jd_file = Path(jd_path)
+    resume_file = Path(resume_path)
 
-    if jd_path.exists() and resume_path.exists():
-        return jd_path.read_text(encoding="utf-8"), resume_path.read_text(encoding="utf-8")
+    assert jd_file.exists(), f"Missing {jd_path}"
+    assert resume_file.exists(), f"Missing {resume_path}"
 
-    return "JOB TITLE: Senior AI Software Engineer", "ALEX MORGAN\nPython FastAPI AI Engineer"
-
-
-def test_talentpilot_pipeline_execution(sample_inputs):
-    jd_text, resume_text = sample_inputs
+    jd_text = jd_file.read_text(encoding="utf-8")
+    resume_text = resume_file.read_text(encoding="utf-8")
 
     pipeline = TalentPilotPipeline()
     card = pipeline.run(jd_text, resume_text)
 
     # Check Agent 1 screening output
     s = card.screening_result
-    assert s.candidate_name == "Alex Morgan"
+    assert s.candidate_name == expected_candidate
     assert s.overall_match_score >= 50
-    assert len(s.skill_matrix) >= 1
+    assert len(s.skill_matrix) >= 3
 
     # Check Agent 2 rubric & question output
     assert len(card.tailored_questions) == 5
     assert len(card.evaluation_rubric) >= 3
 
-
-def test_report_generator_rendering(sample_inputs):
-    jd_text, resume_text = sample_inputs
-
-    pipeline = TalentPilotPipeline()
-    card = pipeline.run(jd_text, resume_text)
-
+    # Test Report Generator
     generator = ReportGenerator(card)
     md = generator.generate_markdown()
     html = generator.generate_html()
 
     assert "TalentPilot Multi-Agent Candidate Evaluation" in md
-    assert "Alex Morgan" in html
+    assert expected_candidate in html
     assert "<!DOCTYPE html>" in html

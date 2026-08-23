@@ -10,6 +10,13 @@ from src.pipeline import TalentPilotPipeline
 from src.report_generator import ReportGenerator
 
 
+SAMPLE_PAIRS = {
+    "engineer": ("data/samples/sample_jd.txt", "data/samples/sample_resume.txt"),
+    "pm": ("data/samples/sample_jd_pm.txt", "data/samples/sample_resume_pm.txt"),
+    "analyst": ("data/samples/sample_jd_analyst.txt", "data/samples/sample_resume_analyst.txt")
+}
+
+
 def run_pipeline(jd_file: str, resume_file: str, serve: bool = True):
     if hasattr(sys.stdout, "reconfigure"):
         try:
@@ -76,12 +83,20 @@ def run_pipeline(jd_file: str, resume_file: str, serve: bool = True):
 
 def main():
     parser = argparse.ArgumentParser(description="TalentPilot Multi-Agent Recruitment System")
-    parser.add_argument("--jd", type=str, default="data/samples/sample_jd.txt", help="Path to JD file")
-    parser.add_argument("--resume", type=str, default="data/samples/sample_resume.txt", help="Path to Resume file")
+    parser.add_argument("--sample", choices=["engineer", "pm", "analyst"], default="engineer", help="Pre-loaded sample role")
+    parser.add_argument("--jd", type=str, default=None, help="Custom path to JD file")
+    parser.add_argument("--resume", type=str, default=None, help="Custom path to Resume file")
     parser.add_argument("--no-serve", action="store_true", help="Do not launch HTTP server")
 
     args = parser.parse_args()
-    run_pipeline(args.jd, args.resume, serve=not args.no_serve)
+
+    if args.jd and args.resume:
+        jd_file = args.jd
+        resume_file = args.resume
+    else:
+        jd_file, resume_file = SAMPLE_PAIRS[args.sample]
+
+    run_pipeline(jd_file, resume_file, serve=not args.no_serve)
 
 
 if __name__ == "__main__":

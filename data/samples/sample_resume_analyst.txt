@@ -1,0 +1,24 @@
+SAMANTHA CHEN
+Email: samantha.chen@example.com | Phone: 555-018-7712 | Portfolio: samanthachen-data.com
+
+SENIOR DATA ANALYST
+Results-driven Data Analyst with 4 years of experience delivering predictive models, automated ETL data pipelines, and executive dashboards. Proven expertise in SQL, Python, and Tableau.
+
+TECHNICAL EXPERTISE:
+- Languages: SQL (PostgreSQL, MySQL, Snowflake), Python (Pandas, NumPy, Scikit-Learn)
+- BI & Visualization: Tableau Desktop, PowerBI, Looker
+- Methods: Regression Analysis, A/B Testing, Time Series Forecasting, Cohort Modeling
+- Tools: Git, Excel (VBA/Advanced Modeling), Docker
+
+PROFESSIONAL EXPERIENCE:
+Senior Data Analyst | Metro Health Systems | 2022 - Present
+- Built and maintained automated Tableau dashboards tracking patient readmission metrics and ER utilization across 12 medical facilities.
+- Optimized complex SQL queries across 10M+ row clinical databases, improving reporting speed by 45%.
+- Partnered with clinical department heads to analyze staff scheduling efficiency, reducing overtime expenditures by $180,000 annually.
+
+Data Analyst | Pioneer Financial | 2020 - 2022
+- Developed customer churn predictive models in Python, achieving 82% accuracy.
+- Automated daily financial KPI reports using Python scripts and SQL views.
+
+EDUCATION:
+BS in Statistics & Data Science — University of North Texas (2020)

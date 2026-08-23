@@ -1,17 +1,23 @@
 # 🎯 TalentPilot — Multi-Agent Candidate Evaluation System
 
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Anthropic Claude](https://img.shields.io/badge/Claude-3.7%20%7C%203.5-purple.svg)](https://www.anthropic.com/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-v2.0-red.svg)](https://docs.pydantic.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 An autonomous, production-grade Multi-Agent AI system built in Python that pairs **Candidate Screening** with **Tailored Interview Rubric Generation** to automate recruiter intake workflows and standardize candidate evaluations.
 
 ---
 
 ## 🌟 Architecture & Multi-Agent Design Highlights
 
-* **Multi-Agent State Passing**: Demonstrates a 2-agent sequential pipeline where **Agent 1 (Screener)** extracts skill gaps and passes Pydantic data directly to **Agent 2 (Rubric Generator)**.
+* **Multi-Agent State Passing**: Demonstrates a 2-agent sequential pipeline where **Agent 1 (Screener)** extracts skill gaps and passes Pydantic state directly to **Agent 2 (Rubric Generator)**.
+* **Dual-Engine AI Reasoning**: Supports live **Anthropic Claude** (`claude-3-7-sonnet-20250219` / `claude-3-5-sonnet-20241022`) via structured JSON schema parsing with automatic offline heuristic fallback.
 * **Pydantic Schema Validation**: Enforces rigid JSON schemas (`CandidateScreeningResult`, `TailoredQuestion`, `RubricCriterion`, `RecruiterEvaluationCard`) to guarantee 100% type-safe downstream pipeline execution.
 * **Gap-Targeted Interview Generation**: Agent 2 analyzes specific candidate gaps identified by Agent 1 and generates 5 probe questions with expected strong answer criteria.
 * **Standardized 1-5 Scoring Rubric**: Automatically creates a structured grading matrix across Core Engineering, LLM Guardrails, and Operational Fit.
 * **Glassmorphism Web Dashboard**: Renders an interactive HTML dashboard featuring match scores, requirement alignment matrices, and recruiter question guides.
-* **Zero-Config Offline Mode**: Includes sample job descriptions and resumes out-of-the-box for instant local execution and CI/CD validation without requiring API keys.
+* **Multi-Role Sample Datasets**: Includes pre-loaded JD/Resume pairs across **AI Engineering**, **AI Product Management**, and **Healthcare Data Analytics**.
 
 ---
 
@@ -52,27 +58,44 @@ An autonomous, production-grade Multi-Agent AI system built in Python that pairs
 2. **Grounded Gap Probing**:  
    Instead of asking generic behavioral questions (*"Tell me about a challenge"*), Agent 2 specifically targets missing requirements identified by Agent 1—providing recruiters with high-leverage technical questions.
 
-3. **Production Testability**:  
-   Includes a full `pytest` suite testing multi-agent state passing, schema validation, and report rendering.
+3. **Zero-Config Offline Fallback**:  
+   Allows developers, CI/CD runners, and interview reviewers to test the complete multi-agent workflow immediately without needing API keys.
 
 ---
 
 ## 🚀 Quick Start & Installation
 
-### 1. Install Dependencies
+### 1. Clone & Install Dependencies
 ```bash
-py -3 -m pip install -r requirements.txt
+git clone https://github.com/amandahervol-alt/TalentPilot-AI-Recruitment-Agent.git
+cd TalentPilot-AI-Recruitment-Agent
+pip install -r requirements.txt
 ```
 
-### 2. Run the Multi-Agent Pipeline & Launch Dashboard
-```bash
-py -3 app.py
+### 2. (Optional) Configure Live AI API Key
+Copy `.env.example` to `.env` to enable live Claude reasoning:
+```env
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+ANTHROPIC_MODEL=claude-3-7-sonnet-20250219
 ```
-*This automatically processes the sample Job Description and Resume, generates the reports in `output/`, and opens the interactive Web Dashboard in your browser at `http://localhost:8000/dashboard.html`!*
+*(If no API key is provided, the application runs seamlessly in zero-config offline mode).*
 
-### 3. Run Automated Unit Tests
+### 3. Run Multi-Agent Pipeline Across Sample Roles
 ```bash
-py -3 -m pytest tests/
+# AI Software Engineer (Default)
+python app.py --sample engineer
+
+# AI Product Manager
+python app.py --sample pm
+
+# Healthcare Data Analyst
+python app.py --sample analyst
+```
+*This automatically processes the Job Description and Resume, generates reports in `output/`, and launches the interactive Web Dashboard in your browser!*
+
+### 4. Run Automated Pytest Suite
+```bash
+python -m pytest tests/
 ```
 
 ---
@@ -80,9 +103,9 @@ py -3 -m pytest tests/
 ## 📂 Repository Structure
 
 ```
-talentpilot_agent/
+TalentPilot-AI-Recruitment-Agent/
 ├── data/
-│   └── samples/                  # Pre-loaded sample JD and Resume text files
+│   └── samples/                  # Sample JD & Resume pairings (Engineer, PM, Analyst)
 ├── src/
 │   ├── schemas.py                # Pydantic schema validation models
 │   ├── screener_agent.py         # Agent 1: Candidate Screener
@@ -93,15 +116,15 @@ talentpilot_agent/
 │   └── test_pipeline.py          # Pytest multi-agent test suite
 ├── output/                       # Generated Markdown & HTML Dashboard outputs
 ├── app.py                        # CLI & Local HTTP Web Server
+├── AGENTS.md                     # Antigravity AI Orchestration Architecture
+├── LICENSE                       # MIT License
+├── .env.example                  # Environment configuration template
 ├── requirements.txt              # Project dependencies
 └── README.md                     # Technical architecture & portfolio overview
 ```
 
 ---
 
-## 👩‍💻 About the Developer
+## 📄 License
 
-Built by **Amanda Hervol**, an AI Software Engineer & Workflow Architect with a unique background combining Python multi-agent development with recruiting and career coaching expertise.
-
-- 🔗 [LinkedIn](https://www.linkedin.com/in/amandaa-hervol/)
-- 📧 [amandahervol@gmail.com](mailto:amandahervol@gmail.com)
+This project is licensed under the [MIT License](LICENSE).

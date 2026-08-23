@@ -1,0 +1,24 @@
+JORDAN TAYLOR
+Email: jordan.taylor@example.com | Phone: 555-014-9921 | LinkedIn: linkedin.com/in/jordantaylor-pm
+
+SENIOR PRODUCT MANAGER — AI & SAAS
+Dynamic Product Leader with 5 years of experience scaling B2B enterprise software and AI workflow products. Adept at transforming customer pain points into strategic roadmaps and high-velocity engineering sprints.
+
+CORE COMPETENCIES:
+- Product Strategy: Product Roadmaps, PRD Authoring, Sprint Planning, User Story Mapping
+- Analytics & Growth: Retention Metrics, Cohort Analysis, A/B Testing, User Discovery
+- Collaboration: Cross-Functional Leadership, Executive Presentations, Agile/Scrum
+- Technologies: Jira, Figma, Mixpanel, SQL, REST APIs
+
+EXPERIENCE:
+Lead Product Manager | CloudWork SaaS | 2022 - Present
+- Spearheaded the launch of AI workflow automation tools used by 45,000+ monthly active users, increasing platform retention by 22% YoY.
+- Authored 30+ technical PRDs and user stories, collaborating with ML engineering teams to ship features on time.
+- Conducted 60+ customer discovery interviews to identify core enterprise automation bottlenecks.
+
+Product Manager | NextGen Analytics | 2020 - 2022
+- Managed core product backlog for reporting and business intelligence suite.
+- Partnered with marketing and customer success to drive a 15% increase in feature adoption.
+
+EDUCATION:
+BS in Business Information Systems — Western University (2020)
