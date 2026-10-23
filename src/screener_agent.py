@@ -59,7 +59,6 @@ Output ONLY valid JSON."""
         response = client.messages.create(
             model=self.model,
             max_tokens=2048,
-            temperature=0.1,
             messages=[{"role": "user", "content": prompt}]
         )
 
