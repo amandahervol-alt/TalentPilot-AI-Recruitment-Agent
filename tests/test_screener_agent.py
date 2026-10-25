@@ -86,11 +86,24 @@ def test_email_and_title_fallbacks(screener):
     assert screener._extract_job_title("job title:  Staff Engineer  \nmore") == "Staff Engineer"
 
 
-@pytest.mark.xfail(strict=True, reason="Known bug: keywords match inside words ('rest' in 'interest', 'rag' in 'storage')")
-@pytest.mark.parametrize("resume, skill", [
-    ("My interests include hiking.", "REST APIs & Webhooks"),
-    ("Managed cold storage logistics.", "RAG & Document Intelligence"),
+@pytest.mark.parametrize("jd, resume, skill", [
+    ("Engineer", "My interests include hiking.", "REST APIs & Webhooks"),
+    ("Engineer", "Shipped rapid prototypes.", "REST APIs & Webhooks"),
+    ("Engineer", "Managed cold storage logistics.", "RAG & Document Intelligence"),
+    ("Data Analyst", "Built NoSQL document stores.", "SQL & Relational Databases"),
 ])
-def test_keywords_do_not_match_inside_other_words(screener, resume, skill):
-    matrix = {m.skill_name: m.status for m in screener._analyze_skill_matrix("Engineer", resume)}
+def test_keywords_do_not_match_inside_other_words(screener, jd, resume, skill):
+    matrix = {m.skill_name: m.status for m in screener._analyze_skill_matrix(jd, resume)}
     assert matrix[skill] == "GAP"
+
+
+@pytest.mark.parametrize("jd, resume, skill", [
+    ("Engineer", "Designed RESTful services.", "REST APIs & Webhooks"),
+    ("Engineer", "Integrated third-party APIs.", "REST APIs & Webhooks"),
+    ("Engineer", "Built a RAG pipeline.", "RAG & Document Intelligence"),
+    ("Engineer", "Dockerized every service.", "GCP Cloud Run & Docker"),
+    ("Data Analyst", "Wrote SQL-based reports.", "SQL & Relational Databases"),
+])
+def test_keywords_still_match_word_prefixes(screener, jd, resume, skill):
+    matrix = {m.skill_name: m.status for m in screener._analyze_skill_matrix(jd, resume)}
+    assert matrix[skill] == "MATCHED"

@@ -94,9 +94,74 @@ def test_placeholder_or_empty_key_never_calls_claude(client, monkeypatch, key):
     client.messages.create.assert_not_called()
 
 
-@pytest.mark.xfail(strict=True, reason="Known bug: rubric agent calls Claude twice for one guide")
 def test_pipeline_makes_one_claude_call_per_agent(client, monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
     client.messages.create.side_effect = [_text(json.dumps(SCREENING)), _text(json.dumps(GUIDE)), _text(json.dumps(GUIDE))]
-    TalentPilotPipeline().run(*load_pair("engineer"))
+    card = TalentPilotPipeline().run(*load_pair("engineer"))
     assert client.messages.create.call_count == 2
+    assert card.screening_result.candidate_name == "Casey Claude"
+    assert [r.criterion_name for r in card.evaluation_rubric] == ["c0", "c1", "c2"]
+
+
+def test_failed_guide_call_is_not_retried_for_rubric(client, monkeypatch):
+    client.messages.create.side_effect = RuntimeError("boom")
+    agent = InterviewRubricAgent(api_key="sk-test")
+    screening = CandidateScreenerAgent(api_key="").screen_candidate(*load_pair("engineer"))
+    agent.generate_interview_guide(screening)
+    agent.generate_grading_rubric(screening)
+    assert client.messages.create.call_count == 1
+
+
+def test_new_screening_gets_its_own_claude_call(client):
+    client.messages.create.return_value = _text(json.dumps(GUIDE))
+    agent = InterviewRubricAgent(api_key="sk-test")
+    for role in ("engineer", "pm"):
+        screening = CandidateScreenerAgent(api_key="").screen_candidate(*load_pair(role))
+        agent.generate_interview_guide(screening)
+        agent.generate_grading_rubric(screening)
+    assert client.messages.create.call_count == 2
+
+
+def test_reads_first_text_block_after_thinking(client):
+    client.messages.create.return_value = SimpleNamespace(content=[
+        SimpleNamespace(type="thinking", thinking="hmm"),
+        SimpleNamespace(type="text", text=json.dumps(SCREENING)),
+    ])
+    s = CandidateScreenerAgent(api_key="sk-test").screen_candidate(*load_pair("engineer"))
+    assert s.candidate_name == "Casey Claude"
+
+
+def test_no_text_block_falls_back(client):
+    client.messages.create.return_value = SimpleNamespace(content=[SimpleNamespace(type="thinking", thinking="hmm")])
+    assert CandidateScreenerAgent(api_key="sk-test").screen_candidate(*load_pair("engineer")).candidate_name == "Alex Morgan"
+
+
+@pytest.mark.parametrize("agent_cls", [CandidateScreenerAgent, InterviewRubricAgent])
+def test_requests_use_current_model_without_sampling_params(client, agent_cls):
+    client.messages.create.return_value = _text(json.dumps(SCREENING if agent_cls is CandidateScreenerAgent else GUIDE))
+    agent = agent_cls(api_key="sk-test")
+    if agent_cls is CandidateScreenerAgent:
+        agent.screen_candidate(*load_pair("engineer"))
+    else:
+        agent.generate_interview_guide(CandidateScreenerAgent(api_key="").screen_candidate(*load_pair("engineer")))
+    kwargs = client.messages.create.call_args.kwargs
+    assert kwargs["model"] == "claude-sonnet-5-5"
+    assert kwargs["max_tokens"] == 4096
+    assert kwargs["extra_body"] == {"output_config": {"effort": "low"}}
+    assert not {"temperature", "top_p", "top_k"} & kwargs.keys()
+
+
+def test_model_can_be_overridden(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_MODEL", "claude-sonnet-5")
+    assert CandidateScreenerAgent(api_key="x").model == InterviewRubricAgent(api_key="x").model == "claude-sonnet-5"
+
+
+@pytest.mark.parametrize("raw, expected", [
+    ('```json\n{"a": 1}\n```', '{"a": 1}'),
+    ('```\n{"a": 1}\n```', '{"a": 1}'),
+    ('  {"a": 1}  ', '{"a": 1}'),
+    ('```json{"a": 1}```', '{"a": 1}'),
+])
+def test_strip_code_fences(raw, expected):
+    from src.claude_response import strip_code_fences
+    assert strip_code_fences(raw) == expected

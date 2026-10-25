@@ -2,6 +2,7 @@ import os
 import json
 from typing import List, Tuple
 from dotenv import load_dotenv
+from src.claude_response import DEFAULT_MODEL, REQUEST_OPTIONS, first_text, strip_code_fences
 from src.schemas import CandidateScreeningResult, TailoredQuestion, RubricCriterion
 
 load_dotenv()
@@ -12,29 +13,35 @@ class InterviewRubricAgent:
 
     def __init__(self, api_key: str = None):
         self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
-        self.model = os.getenv("ANTHROPIC_MODEL", "claude-3-7-sonnet-20250219")
+        self.model = os.getenv("ANTHROPIC_MODEL", DEFAULT_MODEL)
+        # One Claude call returns both questions and rubric; remember it per screening.
+        self._claude_cache = {}
+
+    def _claude_guide(self, screening: CandidateScreeningResult) -> Tuple[List[TailoredQuestion], List[RubricCriterion]]:
+        key = screening.model_dump_json()
+        if key not in self._claude_cache:
+            try:
+                self._claude_cache[key] = self._generate_with_claude(screening)
+            except Exception as e:
+                print(f"[RubricAgent Warning] Claude live guide generation error ({e}). Using offline heuristic engine.")
+                self._claude_cache[key] = ([], [])
+        return self._claude_cache[key]
 
     def generate_interview_guide(self, screening: CandidateScreeningResult) -> List[TailoredQuestion]:
         """Generate questions tailored to candidate strengths and gaps."""
         if self.api_key and self.api_key != "your_anthropic_api_key_here":
-            try:
-                questions, _ = self._generate_with_claude(screening)
-                if questions:
-                    return questions
-            except Exception as e:
-                print(f"[RubricAgent Warning] Claude live guide generation error ({e}). Using offline heuristic engine.")
+            questions, _ = self._claude_guide(screening)
+            if questions:
+                return questions
 
         return self._generate_questions_heuristically(screening)
 
     def generate_grading_rubric(self, screening: CandidateScreeningResult) -> List[RubricCriterion]:
         """Generate a 1-5 evaluation rubric for candidate scoring."""
         if self.api_key and self.api_key != "your_anthropic_api_key_here":
-            try:
-                _, rubric = self._generate_with_claude(screening)
-                if rubric:
-                    return rubric
-            except Exception as e:
-                pass
+            _, rubric = self._claude_guide(screening)
+            if rubric:
+                return rubric
 
         return self._generate_rubric_heuristically(screening)
 
@@ -81,18 +88,12 @@ Output ONLY valid JSON."""
 
         response = client.messages.create(
             model=self.model,
-            max_tokens=2500,
-            messages=[{"role": "user", "content": prompt}]
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}],
+            **REQUEST_OPTIONS,
         )
 
-        content = response.content[0].text.strip()
-        if content.startswith("```"):
-            lines = content.splitlines()
-            if lines[0].startswith("```"):
-                lines = lines[1:]
-            if lines and lines[-1].startswith("```"):
-                lines = lines[:-1]
-            content = "\n".join(lines).strip()
+        content = strip_code_fences(first_text(response))
 
         data = json.loads(content)
         questions = [TailoredQuestion.model_validate(q) for q in data.get("tailored_questions", [])]

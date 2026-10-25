@@ -264,5 +264,6 @@ class ReportGenerator:
 </body>
 </html>
 """
-        template = Template(html_template)
+        # Resume and JD text is untrusted: escape everything rendered into the page.
+        template = Template(html_template, autoescape=True)
         return template.render(c=c, s=s)

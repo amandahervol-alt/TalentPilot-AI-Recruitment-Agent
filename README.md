@@ -12,7 +12,7 @@ An autonomous, production-grade Multi-Agent AI system built in Python that pairs
 ## 🌟 Architecture & Multi-Agent Design Highlights
 
 * **Multi-Agent State Passing**: Demonstrates a 2-agent sequential pipeline where **Agent 1 (Screener)** extracts skill gaps and passes Pydantic state directly to **Agent 2 (Rubric Generator)**.
-* **Dual-Engine AI Reasoning**: Supports live **Anthropic Claude** (`claude-3-7-sonnet-20250219` / `claude-3-5-sonnet-20241022`) via structured JSON schema parsing with automatic offline heuristic fallback.
+* **Dual-Engine AI Reasoning**: Supports live **Anthropic Claude** (`claude-sonnet-5-5` by default, configurable with `ANTHROPIC_MODEL`) via structured JSON schema parsing with automatic offline heuristic fallback.
 * **Pydantic Schema Validation**: Enforces rigid JSON schemas (`CandidateScreeningResult`, `TailoredQuestion`, `RubricCriterion`, `RecruiterEvaluationCard`) to guarantee 100% type-safe downstream pipeline execution.
 * **Gap-Targeted Interview Generation**: Agent 2 analyzes specific candidate gaps identified by Agent 1 and generates 5 probe questions with expected strong answer criteria.
 * **Standardized 1-5 Scoring Rubric**: Automatically creates a structured grading matrix across Core Engineering, LLM Guardrails, and Operational Fit.
@@ -76,7 +76,7 @@ pip install -r requirements.txt
 Copy `.env.example` to `.env` to enable live Claude reasoning:
 ```env
 ANTHROPIC_API_KEY=sk-ant-your-key-here
-ANTHROPIC_MODEL=claude-3-7-sonnet-20250219
+ANTHROPIC_MODEL=claude-sonnet-5-5
 ```
 *(If no API key is provided, the application runs seamlessly in zero-config offline mode).*
 

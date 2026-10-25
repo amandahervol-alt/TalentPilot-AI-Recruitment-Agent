@@ -20,5 +20,5 @@ TalentPilot implements a sequential 2-agent recruitment architecture designed to
 - Generates a formatted Recruiter Markdown Dossier (`output/candidate_card.md`) and an interactive glassmorphic web dashboard (`output/dashboard.html`).
 
 ## Dual-Engine Operation
-- **Live AI Mode**: Anthropic Claude (`claude-3-7-sonnet-20250219` / `claude-3-5-sonnet-20241022`) via structured JSON schema parsing.
+- **Live AI Mode**: Anthropic Claude (`claude-sonnet-5-5` by default, configurable with `ANTHROPIC_MODEL`) via structured JSON schema parsing.
 - **Zero-Config Offline Mode**: Deterministic heuristic rule engine for instant local execution and automated testing without API keys.

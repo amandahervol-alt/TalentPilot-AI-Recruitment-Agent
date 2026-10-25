@@ -3,9 +3,15 @@ import re
 import json
 from typing import List, Optional
 from dotenv import load_dotenv
+from src.claude_response import DEFAULT_MODEL, REQUEST_OPTIONS, first_text, strip_code_fences
 from src.schemas import CandidateScreeningResult, SkillMatch
 
 load_dotenv()
+
+
+def _mentions(text: str, keyword: str) -> bool:
+    """Keyword must start a word: 'rest' matches 'RESTful' but not 'interest'; 'sql' not 'nosql'."""
+    return re.search(rf"(?<![a-z0-9]){re.escape(keyword)}", text) is not None
 
 
 class CandidateScreenerAgent:
@@ -13,7 +19,7 @@ class CandidateScreenerAgent:
 
     def __init__(self, api_key: str = None):
         self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
-        self.model = os.getenv("ANTHROPIC_MODEL", "claude-3-7-sonnet-20250219")
+        self.model = os.getenv("ANTHROPIC_MODEL", DEFAULT_MODEL)
 
     def screen_candidate(self, jd_text: str, resume_text: str) -> CandidateScreeningResult:
         """Analyze candidate resume against job description requirements using Claude or heuristic fallback."""
@@ -58,18 +64,12 @@ Output ONLY valid JSON."""
 
         response = client.messages.create(
             model=self.model,
-            max_tokens=2048,
-            messages=[{"role": "user", "content": prompt}]
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}],
+            **REQUEST_OPTIONS,
         )
 
-        content = response.content[0].text.strip()
-        if content.startswith("```"):
-            lines = content.splitlines()
-            if lines[0].startswith("```"):
-                lines = lines[1:]
-            if lines and lines[-1].startswith("```"):
-                lines = lines[:-1]
-            content = "\n".join(lines).strip()
+        content = strip_code_fences(first_text(response))
 
         data = json.loads(content)
         return CandidateScreeningResult.model_validate(data)
@@ -149,7 +149,7 @@ Output ONLY valid JSON."""
 
         matrix = []
         for skill_name, keywords, rationale in skills_to_check:
-            is_matched = any(kw in resume_lower for kw in keywords)
+            is_matched = any(_mentions(resume_lower, kw) for kw in keywords)
             status = "MATCHED" if is_matched else "GAP"
 
             matrix.append(SkillMatch(
