@@ -1,5 +1,5 @@
 pydantic>=2.14.1
-pytest>=9.1.1
+pytest>=9.2.0
 python-dotenv>=1.2.4
 anthropic==2.1.0
 rich>=15.0.0
